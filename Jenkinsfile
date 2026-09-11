@@ -1,0 +1,35 @@
+pipeline {
+    agent none
+
+    stages {
+
+        stage('Back-end') {
+            agent {
+                docker {
+                    image 'maven:3.8.1-adoptopenjdk-11'
+                }
+            }
+
+            steps {
+                dir('backend') {
+                    sh 'mvn clean install'
+                }
+            }
+        }
+
+        stage('Front-end') {
+            agent {
+                docker {
+                    image 'node:16-alpine'
+                }
+            }
+
+            steps {
+                dir('frontend') {
+                    sh 'npm install'
+                    sh 'npm start'
+                }
+            }
+        }
+    }
+}
